@@ -1,4 +1,25 @@
-<!DOCTYPE html>
+import pandas as pd
+import os
+from datetime import datetime, timezone
+
+def create_index():
+    csv_path = 'market_data.csv'
+    output_path = 'index.html'
+    
+    latest_date_str = "Unknown"
+    if os.path.exists(csv_path):
+        try:
+            df = pd.read_csv(csv_path)
+            # Find the maximum date
+            df['Date'] = pd.to_datetime(df['Date'], utc=True)
+            latest_date_str = df['Date'].max().strftime('%Y-%m-%d')
+        except Exception as e:
+            print(f"Error reading {csv_path}: {e}")
+            
+    # current UTC time as generation time
+    gen_time_str = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
+
+    html_content = f"""<!DOCTYPE html>
 <html lang="ja">
 
 <head>
@@ -6,52 +27,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S&P 500 Presidential Cycle Analysis</title>
     <style>
-        body {
+        body {{
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #121212;
             color: #ffffff;
             margin: 0;
             padding: 0;
-        }
+        }}
 
-        .container {
+        .container {{
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
-        }
+        }}
 
-        h1 {
+        h1 {{
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 10px;
             color: #e0e0e0;
-        }
+        }}
 
-        p.subtitle {
+        p.subtitle {{
             text-align: center;
             color: #a0a0a0;
             margin-bottom: 10px;
             font-size: 1.1rem;
-        }
+        }}
         
-        .update-info {
+        .update-info {{
             text-align: center;
             color: #707070;
             font-size: 0.9rem;
             margin-bottom: 50px;
-        }
-        .update-info span {
+        }}
+        .update-info span {{
             color: #00CC96;
             font-weight: 600;
-        }
+        }}
 
-        .gallery {
+        .gallery {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-        }
+        }}
 
-        .card {
+        .card {{
             background-color: #1e1e1e;
             border-radius: 12px;
             overflow: hidden;
@@ -62,23 +83,23 @@
             flex-direction: column;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             border: 1px solid #333;
-        }
+        }}
 
-        .card:hover {
+        .card:hover {{
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
             border-color: #555;
-        }
+        }}
 
-        .iframe-container {
+        .iframe-container {{
             position: relative;
             width: 100%;
             height: 250px;
             overflow: hidden;
             background-color: #000;
-        }
+        }}
 
-        .iframe-container iframe {
+        .iframe-container iframe {{
             position: absolute;
             top: 0;
             left: 0;
@@ -89,41 +110,41 @@
             border: none;
             pointer-events: none;
             /* iframe内をクリックさせない */
-        }
+        }}
 
-        .iframe-overlay {
+        .iframe-overlay {{
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             z-index: 10;
-        }
+        }}
 
-        .card-content {
+        .card-content {{
             padding: 20px;
             flex-grow: 1;
-        }
+        }}
 
-        .card-title {
+        .card-title {{
             font-size: 1.25rem;
             font-weight: 600;
             margin: 0 0 10px 0;
             color: #f0f0f0;
-        }
+        }}
 
-        .card-desc {
+        .card-desc {{
             font-size: 0.95rem;
             color: #b0b0b0;
             margin: 0;
             line-height: 1.5;
-        }
+        }}
 
-        @media (max-width: 768px) {
-            .gallery {
+        @media (max-width: 768px) {{
+            .gallery {{
                 grid-template-columns: 1fr;
-            }
-        }
+            }}
+        }}
     </style>
 </head>
 
@@ -133,7 +154,7 @@
         <h1>S&P 500 Presidential Cycle Analysis</h1>
         <p class="subtitle">大統領選挙サイクルに基づく S&P 500 の過去データ分析ダッシュボード</p>
         <div class="update-info">
-            Data valid as of: <span>2026-02-20</span>&nbsp; | &nbsp;Last Generated: 2026-02-23 13:48 UTC
+            Data valid as of: <span>{latest_date_str}</span>&nbsp; | &nbsp;Last Generated: {gen_time_str}
         </div>
 
         <div class="gallery">
@@ -199,3 +220,11 @@
 </body>
 
 </html>
+"""
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    print(f"Successfully generated {output_path} (Data Date: {latest_date_str})")
+
+if __name__ == '__main__':
+    create_index()
