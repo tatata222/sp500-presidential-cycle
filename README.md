@@ -7,5 +7,7 @@ Data is fetched automatically using GitHub Actions.
 - [Yearly Chart by Election Cycle](https://tatata222.github.io/sp500-presidential-cycle/yearly_chart.html)
 - [Weekday Average Returns](https://tatata222.github.io/sp500-presidential-cycle/weekday_chart.html)
 - [Daily Returns Table (2025)](https://tatata222.github.io/sp500-presidential-cycle/daily_2025_table.html)
+- [Daily Return Distribution](https://tatata222.github.io/sp500-presidential-cycle/daily_return_distribution_chart.html)
+- [Absolute Return Ranges](https://tatata222.github.io/sp500-presidential-cycle/absolute_return_distribution_chart.html)
 
 All HTML files in the repository can be viewed by appending their filenames to the base Pages URL.

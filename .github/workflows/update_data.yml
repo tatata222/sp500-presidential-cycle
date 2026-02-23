@@ -38,6 +38,8 @@ jobs:
         python generate_weekday_chart.py
         python generate_weekday_table.py
         python generate_2025_daily_table.py
+        python generate_daily_return_distribution_chart.py
+        python generate_absolute_return_distribution_chart.py
 
     - name: Commit and Push changes
       run: |
