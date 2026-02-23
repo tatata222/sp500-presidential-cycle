@@ -203,6 +203,17 @@ def create_index():
                 </div>
             </a>
 
+            <a href="yield_history_chart.html" class="card">
+                <div class="iframe-container">
+                    <iframe src="yield_history_chart.html" scrolling="no" tabindex="-1"></iframe>
+                    <div class="iframe-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">US 10-Year Treasury Yield History</h2>
+                    <p class="card-desc">過去から現在までの米10年債利回りとS&P 500の長期的な推移を示す折れ線グラフです。</p>
+                </div>
+            </a>
+
             <a href="daily_2025_table.html" class="card">
                 <div class="iframe-container" style="background-color: #111;">
                     <iframe src="daily_2025_table.html" scrolling="no" tabindex="-1"></iframe>
