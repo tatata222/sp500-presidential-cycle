@@ -75,6 +75,8 @@ def create_chart():
     df_norm['Cycle'] = df_norm['Year'].apply(get_cycle_labels)
 
     current_year = 2026
+    current_cycle = get_cycle_labels(current_year)
+    
     ranges = [
         ("All Time", years[0]),
         ("Last 50 Years", current_year - 50),
@@ -217,7 +219,7 @@ def create_chart():
             x=all_plotdates,
             y=curr_y_raw.values, # default is Raw
             mode='lines',
-            name=f"Current Year ({current_year})",
+            name=f"Current Year: {current_year} ({current_cycle})",
             visible=visible,
             opacity=1.0,
             connectgaps=True,
