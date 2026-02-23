@@ -219,7 +219,7 @@ def create_chart():
             x=all_plotdates,
             y=curr_y_raw.values, # default is Raw
             mode='lines',
-            name=f"Current Year: {current_year} ({current_cycle})",
+            name=f"Current Year: {current_year}<br>({current_cycle})",
             visible=visible,
             opacity=1.0,
             connectgaps=True,
