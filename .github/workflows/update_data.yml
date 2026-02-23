@@ -40,6 +40,7 @@ jobs:
         python generate_2025_daily_table.py
         python generate_daily_return_distribution_chart.py
         python generate_absolute_return_distribution_chart.py
+        python generate_yield_history_chart.py
         python generate_index.py
 
     - name: Commit and Push changes
