@@ -214,6 +214,50 @@ def create_index():
                 </div>
             </a>
 
+            <a href="holiday_effect_chart.html" class="card">
+                <div class="iframe-container">
+                    <iframe src="holiday_effect_chart.html" scrolling="no" tabindex="-1"></iframe>
+                    <div class="iframe-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">Holiday Effect Analysis</h2>
+                    <p class="card-desc">休日前後や連休前後におけるS&P 500の平均的な騰落率を分析した棒グラフです。</p>
+                </div>
+            </a>
+
+            <a href="jp_market_chart.html" class="card">
+                <div class="iframe-container">
+                    <iframe src="jp_market_chart.html" scrolling="no" tabindex="-1"></iframe>
+                    <div class="iframe-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">Japanese Market History (Nikkei & TOPIX)</h2>
+                    <p class="card-desc">日経平均とTOPIXETFの過去からの推移を比較できる折れ線グラフです。</p>
+                </div>
+            </a>
+
+            <a href="jp_anomaly_chart.html" class="card">
+                <div class="iframe-container">
+                    <iframe src="jp_anomaly_chart.html" scrolling="no" tabindex="-1"></iframe>
+                    <div class="iframe-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">Japanese Market Monthly Anomaly</h2>
+                    <p class="card-desc">日経平均とTOPIXの月別の平均リターンと勝率を可視化したアノマリー分析チャートです。</p>
+                </div>
+            </a>
+
+            <a href="jp_ytd_anomaly_chart.html" class="card">
+                <div class="iframe-container">
+                    <iframe src="jp_ytd_anomaly_chart.html" scrolling="no" tabindex="-1"></iframe>
+                    <div class="iframe-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">Japanese Market YTD Anomaly</h2>
+                    <p class="card-desc">年初を100とした場合の、日経平均とTOPIXの年間を通じた累積推移（過去平均と今年）を比較するアノマリーチャートです。</p>
+                </div>
+            </a>
+
             <a href="daily_2025_table.html" class="card">
                 <div class="iframe-container" style="background-color: #111;">
                     <iframe src="daily_2025_table.html" scrolling="no" tabindex="-1"></iframe>

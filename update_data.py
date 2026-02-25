@@ -16,7 +16,9 @@ def update_market_data():
     symbols = {
         'S&P 500': '^GSPC',
         'NASDAQ 100': '^NDX',
-        'US 10-Year Treasury Yield': '^TNX'
+        'US 10-Year Treasury Yield': '^TNX',
+        'Nikkei 225': '^N225',
+        'TOPIX': '1306.T'
     }
 
     dfs = []

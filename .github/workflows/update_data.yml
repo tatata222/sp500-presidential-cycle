@@ -41,6 +41,10 @@ jobs:
         python generate_daily_return_distribution_chart.py
         python generate_absolute_return_distribution_chart.py
         python generate_yield_history_chart.py
+        python generate_holiday_chart.py
+        python generate_jp_chart.py
+        python generate_jp_anomaly_chart.py
+        python generate_jp_ytd_anomaly_chart.py
         python generate_index.py
 
     - name: Commit and Push changes
