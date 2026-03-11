@@ -75,44 +75,37 @@ def generate_vix_list_table():
         
     res_df = pd.DataFrame(results)
     
-    # Formatting for Plotly Table
-    dates = res_df['Date']
-    vix_vals = [f"{v:.2f}" for v in res_df['VIX']]
-    sp500_vals = [f"{v:.2f}" for v in res_df['SP500']]
-    
     def format_ret(val):
         if pd.isna(val):
             return "N/A"
         return f"{val:+.2f}%"
-        
-    def get_color(val):
-        if pd.isna(val):
-            return 'white'
-        if val < 0:
-            return '#ff4444'
-        elif val >= 5:
-            return '#00ff00'
-        else:
-            return 'white'
 
-    ret_1w_str = [format_ret(v) for v in res_df['Ret_1W']]
-    ret_1m_str = [format_ret(v) for v in res_df['Ret_1M']]
-    ret_3m_str = [format_ret(v) for v in res_df['Ret_3M']]
-    ret_6m_str = [format_ret(v) for v in res_df['Ret_6M']]
-    ret_1y_str = [format_ret(v) for v in res_df['Ret_1Y']]
-    
+    def get_color(series):
+        # returns a Series of colors
+        colors = []
+        for val in series:
+            if pd.isna(val):
+                colors.append('white')
+            elif val < 0:
+                colors.append('#ff4444')
+            elif val >= 5:
+                colors.append('#00ff00')
+            else:
+                colors.append('white')
+        return pd.Series(colors)
+
     font_colors = [
-        ['white'] * len(res_df),
-        ['white'] * len(res_df),
-        ['white'] * len(res_df),
-        [get_color(v) for v in res_df['Ret_1W']],
-        [get_color(v) for v in res_df['Ret_1M']],
-        [get_color(v) for v in res_df['Ret_3M']],
-        [get_color(v) for v in res_df['Ret_6M']],
-        [get_color(v) for v in res_df['Ret_1Y']],
+        pd.Series(['white'] * len(res_df)),
+        pd.Series(['white'] * len(res_df)),
+        pd.Series(['white'] * len(res_df)),
+        get_color(res_df['Ret_1W']),
+        get_color(res_df['Ret_1M']),
+        get_color(res_df['Ret_3M']),
+        get_color(res_df['Ret_6M']),
+        get_color(res_df['Ret_1Y']),
     ]
     
-    fill_colors = [['#2a2a2a'] * len(res_df) for _ in range(8)]
+    fill_colors = [pd.Series(['#2a2a2a'] * len(res_df)) for _ in range(8)]
     
     fig = go.Figure(data=[go.Table(
         header=dict(
@@ -124,14 +117,14 @@ def generate_vix_list_table():
         ),
         cells=dict(
             values=[
-                dates, 
-                vix_vals, 
-                sp500_vals, 
-                ret_1w_str,
-                ret_1m_str,
-                ret_3m_str,
-                ret_6m_str,
-                ret_1y_str
+                res_df['Date'], 
+                res_df['VIX'].apply(lambda v: f"{v:.2f}"), 
+                res_df['SP500'].apply(lambda v: f"{v:.2f}"), 
+                res_df['Ret_1W'].apply(format_ret),
+                res_df['Ret_1M'].apply(format_ret),
+                res_df['Ret_3M'].apply(format_ret),
+                res_df['Ret_6M'].apply(format_ret),
+                res_df['Ret_1Y'].apply(format_ret)
             ],
             fill_color=fill_colors,
             font=dict(color=font_colors, size=13),
@@ -147,6 +140,15 @@ def generate_vix_list_table():
         template='plotly_dark',
         margin=dict(l=20, r=20, t=80, b=20)
     )
+
+    import json
+    # Print the lengths and types to stdout to inspect what Plotly gets
+    table = fig.data[0]
+    print("Cells values type:", type(table.cells.values))
+    print("Cells font color type:", type(table.cells.font.color))
+    print("Cells font color len:", len(table.cells.font.color))
+    print("Cells font color [3] type:", type(table.cells.font.color[3]))
+    print("Cells font color [3] len:", len(table.cells.font.color[3]))
 
     fig.write_html(output_path)
     print(f"VIX table successfully saved to {output_path}")
