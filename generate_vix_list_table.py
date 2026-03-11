@@ -83,34 +83,22 @@ def generate_vix_list_table():
     def format_ret(val):
         if pd.isna(val):
             return "N/A"
-        return f"{val:+.2f}%"
         
-    def get_color(val):
-        if pd.isna(val):
-            return 'white'
+        # Color logic
         if val < 0:
-            return '#ff4444'
+            color = "#ff4444"
         elif val >= 5:
-            return '#00ff00'
+            color = "#00ff00"
         else:
-            return 'white'
+            color = "white"
+            
+        return f'<span style="color: {color};">{val:+.2f}%</span>'
 
     ret_1w_str = [format_ret(v) for v in res_df['Ret_1W']]
     ret_1m_str = [format_ret(v) for v in res_df['Ret_1M']]
     ret_3m_str = [format_ret(v) for v in res_df['Ret_3M']]
     ret_6m_str = [format_ret(v) for v in res_df['Ret_6M']]
     ret_1y_str = [format_ret(v) for v in res_df['Ret_1Y']]
-    
-    font_colors = [
-        ['white'] * len(res_df),
-        ['white'] * len(res_df),
-        ['white'] * len(res_df),
-        [get_color(v) for v in res_df['Ret_1W']],
-        [get_color(v) for v in res_df['Ret_1M']],
-        [get_color(v) for v in res_df['Ret_3M']],
-        [get_color(v) for v in res_df['Ret_6M']],
-        [get_color(v) for v in res_df['Ret_1Y']],
-    ]
     
     fig = go.Figure(data=[go.Table(
         header=dict(
@@ -132,7 +120,7 @@ def generate_vix_list_table():
                 ret_1y_str
             ],
             fill_color='#2a2a2a',
-            font=dict(color=font_colors, size=13),
+            font=dict(color='white', size=13),
             align=['center', 'right', 'right', 'right', 'right', 'right', 'right', 'right'],
             height=30
         )
