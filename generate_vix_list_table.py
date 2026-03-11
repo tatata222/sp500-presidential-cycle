@@ -91,10 +91,39 @@ def generate_vix_list_table():
             return "N/A"
         return f"{val:+.2f}%"
 
+    def get_historical_event(date_str):
+        year = date_str[:4]
+        month = date_str[5:7]
+        if year == '1990': return '湾岸戦争ショック / 米国景気後退'
+        if year == '1991': return '湾岸戦争ショック / 米国景気後退'
+        if year == '1997': return 'アジア通貨危機'
+        if year == '1998': return 'ロシア危機 / LTCM破綻'
+        if year == '1999': return 'ITバブル警戒感 / Y2K問題'
+        if year == '2000': return 'ITバブル崩壊'
+        if year == '2001': return '同時多発テロ (9.11) / ITバブル崩壊' if month in ['09', '10'] else 'ITバブル崩壊'
+        if year == '2002': return 'ITバブル崩壊 / 企業不祥事'
+        if year == '2003': return 'イラク戦争警戒'
+        if year == '2007': return 'サブプライム・ショック'
+        if year in ['2008', '2009']: return 'リーマン・ショック (世界金融危機)'
+        if year == '2010': return 'ギリシャショック / フラッシュ・クラッシュ'
+        if year == '2011': return '米国債ショック / 欧州債務危機'
+        if year == '2015': return 'チャイナショック'
+        if year == '2018': return 'VIXショック (Volmageddon)' if month == '02' else '米中貿易摩擦 (トランプ関税)'
+        if year == '2020': return 'コロナショック'
+        if year == '2021': return 'インフレ懸念 / 変異株警戒'
+        if year == '2022': return '積極的利上げショック / ウクライナ侵攻'
+        if year == '2024': return '日銀利上げ / 円キャリートレード巻き戻し'
+        if year == '2025': return '直近の市場ショック / ボラティリティ上昇'
+        return '-'
+
     rows_html = ""
     for _, row in res_df.iterrows():
         r_html = "<tr>"
         r_html += f"<td style='text-align: center;'>{row['Date']}</td>"
+        
+        event = get_historical_event(row['Date'])
+        r_html += f"<td style='text-align: left; font-size: 13px; color: #bbbbbb; font-weight: 500;'>{event}</td>"
+        
         r_html += f"<td>{row['VIX']:.2f}</td>"
         r_html += f"<td>{row['SP500']:.2f}</td>"
         for c in ['Ret_1W', 'Ret_1M', 'Ret_3M', 'Ret_6M', 'Ret_1Y']:
@@ -169,6 +198,7 @@ def generate_vix_list_table():
     <table>
         <tr>
             <th>Date</th>
+            <th style="text-align: left;">要因 (Event)</th>
             <th>VIX</th>
             <th>S&P 500</th>
             <th>1 Week Later</th>
