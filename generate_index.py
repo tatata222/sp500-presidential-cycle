@@ -258,6 +258,17 @@ def create_index():
                 </div>
             </a>
 
+            <a href="jp_election_anomaly_chart.html" class="card">
+                <div class="iframe-container">
+                    <iframe src="jp_election_anomaly_chart.html" scrolling="no" tabindex="-1"></iframe>
+                    <div class="iframe-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">Nikkei 225 Election Anomaly</h2>
+                    <p class="card-desc">衆院選・参院選における「与党勝利・与党敗北」ごとの日経平均のアノマリー（投開票日前後1ヶ月〜半年）を可視化した分析チャートです。</p>
+                </div>
+            </a>
+
             <a href="daily_2025_table.html" class="card">
                 <div class="iframe-container" style="background-color: #111;">
                     <iframe src="daily_2025_table.html" scrolling="no" tabindex="-1"></iframe>
@@ -266,6 +277,28 @@ def create_index():
                 <div class="card-content">
                     <h2 class="card-title">Daily Returns Table (2025)</h2>
                     <p class="card-desc">2025年の日々のS&P 500の終値データと騰落率をまとめたデータテーブルです。</p>
+                </div>
+            </a>
+
+            <a href="vix_fg_chart.html" class="card">
+                <div class="iframe-container">
+                    <iframe src="vix_fg_chart.html" scrolling="no" tabindex="-1"></iframe>
+                    <div class="iframe-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">VIX & Fear and Greed Index</h2>
+                    <p class="card-desc">市場の恐怖度を示すVIX指数と、CNNのFear & Greed Indexの推移を比較・確認できるチャートです。</p>
+                </div>
+            </a>
+
+            <a href="vix_sp500_returns_table.html" class="card">
+                <div class="iframe-container">
+                    <iframe src="vix_sp500_returns_table.html" scrolling="no" tabindex="-1"></iframe>
+                    <div class="iframe-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">VIX > 30 Forward Returns</h2>
+                    <p class="card-desc">VIX指数が30を上抜けたタイミングとその後のS&P 500のフォワード・リターン（1週間〜1年後）を一覧にしたテーブルです。</p>
                 </div>
             </a>
 
