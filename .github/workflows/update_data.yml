@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pandas plotly yfinance
+        pip install pandas plotly yfinance requests
 
     - name: Update CSV data
       run: python update_data.py
@@ -45,6 +45,9 @@ jobs:
         python generate_jp_chart.py
         python generate_jp_anomaly_chart.py
         python generate_jp_ytd_anomaly_chart.py
+        python generate_jp_election_anomaly_chart.py
+        python generate_vix_fg_chart.py
+        python generate_vix_list_table.py
         python generate_index.py
 
     - name: Commit and Push changes
