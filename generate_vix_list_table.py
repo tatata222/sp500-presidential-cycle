@@ -1,7 +1,5 @@
 import pandas as pd
 import yfinance as yf
-import plotly.graph_objects as go
-import os
 
 def generate_vix_list_table():
     output_path = 'vix_sp500_returns_table.html'
@@ -68,89 +66,125 @@ def generate_vix_list_table():
             if not future_data.empty:
                 first_future_date = future_data.index[0]
                 price_future = future_data.loc[first_future_date, 'SP500']
+                if isinstance(price_future, pd.Series):
+                    price_future = price_future.iloc[0]
+                if isinstance(price_0, pd.Series):
+                    price_0 = price_0.iloc[0]
                 ret = (price_future - price_0) / price_0 * 100
-                row[mapping[label]] = ret
+                row[mapping[label]] = float(ret)
                 
         results.append(row)
         
     res_df = pd.DataFrame(results)
     
-    def format_ret(val):
+    def get_color_class(val):
+        if pd.isna(val):
+            return "white"
+        if val < 0:
+            return "red"
+        if val >= 5:
+            return "green"
+        return "white"
+
+    def format_val(val):
         if pd.isna(val):
             return "N/A"
         return f"{val:+.2f}%"
 
-    def get_color(series):
-        # returns a Series of colors
-        colors = []
-        for val in series:
-            if pd.isna(val):
-                colors.append('white')
-            elif val < 0:
-                colors.append('#ff4444')
-            elif val >= 5:
-                colors.append('#00ff00')
-            else:
-                colors.append('white')
-        return pd.Series(colors)
-
-    font_colors = [
-        pd.Series(['white'] * len(res_df)),
-        pd.Series(['white'] * len(res_df)),
-        pd.Series(['white'] * len(res_df)),
-        get_color(res_df['Ret_1W']),
-        get_color(res_df['Ret_1M']),
-        get_color(res_df['Ret_3M']),
-        get_color(res_df['Ret_6M']),
-        get_color(res_df['Ret_1Y']),
-    ]
-    
-    fill_colors = [pd.Series(['#2a2a2a'] * len(res_df)) for _ in range(8)]
-    
-    fig = go.Figure(data=[go.Table(
-        header=dict(
-            values=['Date', 'VIX', 'S&P 500', '1 Week Later', '1 Month Later', '3 Months Later', '6 Months Later', '1 Year Later'],
-            fill_color='#111111',
-            align='center',
-            font=dict(color='white', size=14),
-            height=40
-        ),
-        cells=dict(
-            values=[
-                res_df['Date'], 
-                res_df['VIX'].apply(lambda v: f"{v:.2f}"), 
-                res_df['SP500'].apply(lambda v: f"{v:.2f}"), 
-                res_df['Ret_1W'].apply(format_ret),
-                res_df['Ret_1M'].apply(format_ret),
-                res_df['Ret_3M'].apply(format_ret),
-                res_df['Ret_6M'].apply(format_ret),
-                res_df['Ret_1Y'].apply(format_ret)
-            ],
-            fill_color=fill_colors,
-            font=dict(color=font_colors, size=13),
-            align=['center', 'right', 'right', 'right', 'right', 'right', 'right', 'right'],
-            height=30
-        )
-    )])
-
+    rows_html = ""
+    for _, row in res_df.iterrows():
+        r_html = "<tr>"
+        r_html += f"<td style='text-align: center;'>{row['Date']}</td>"
+        r_html += f"<td>{row['VIX']:.2f}</td>"
+        r_html += f"<td>{row['SP500']:.2f}</td>"
+        for c in ['Ret_1W', 'Ret_1M', 'Ret_3M', 'Ret_6M', 'Ret_1Y']:
+            val = row[c]
+            c_class = get_color_class(val)
+            txt = format_val(val)
+            r_html += f"<td class='{c_class}'>{txt}</td>"
+        r_html += "</tr>\n"
+        rows_html += r_html
+        
     num_events = len(res_df)
     
-    fig.update_layout(
-        title=f"S&P 500 Forward Returns after VIX crosses above 30<br><sup>Total Occurrences since 1990: {num_events} times</sup>",
-        template='plotly_dark',
-        margin=dict(l=20, r=20, t=80, b=20)
-    )
-
-    import json
-    # Print the lengths and types to stdout to inspect what Plotly gets
-    table = fig.data[0]
-    print("Cells values type:", type(table.cells.values))
-    print("Cells font color type:", type(table.cells.font.color))
-    print("Cells font color len:", len(table.cells.font.color))
-    print("Cells font color [3] type:", type(table.cells.font.color[3]))
-    print("Cells font color [3] len:", len(table.cells.font.color[3]))
-
-    fig.write_html(output_path)
+    html_template = f"""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {{
+            background-color: #111111;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }}
+        h2 {{
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 20px;
+        }}
+        .subtitle {{
+            text-align: center;
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }}
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }}
+        th {{
+            background-color: #222222;
+            color: white;
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #444;
+            position: sticky;
+            top: 0;
+            font-weight: bold;
+        }}
+        th:first-child {{
+            text-align: center;
+        }}
+        td {{
+            background-color: #2a2a2a;
+            padding: 10px 12px;
+            text-align: right;
+            border-bottom: 1px solid #333;
+        }}
+        tr:hover td {{
+            background-color: #333333;
+        }}
+        .red {{ color: #ff4444; }}
+        .green {{ color: #00ff00; }}
+        .white {{ color: white; }}
+    </style>
+</head>
+<body>
+    <h2>S&P 500 Forward Returns after VIX crosses above 30</h2>
+    <div class="subtitle">Total Occurrences since 1990: {num_events} times</div>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>VIX</th>
+            <th>S&P 500</th>
+            <th>1 Week Later</th>
+            <th>1 Month Later</th>
+            <th>3 Months Later</th>
+            <th>6 Months Later</th>
+            <th>1 Year Later</th>
+        </tr>
+        {rows_html}
+    </table>
+</body>
+</html>
+"""
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(html_template)
+        
     print(f"VIX table successfully saved to {output_path}")
 
 if __name__ == "__main__":
